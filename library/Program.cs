@@ -9,8 +9,7 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("Library");
 if (string.IsNullOrWhiteSpace(connectionString))
 {
-    throw new InvalidOperationException("Connection string 'Library' is missing. Add it in Manage User
-    Secrets.");
+    throw new InvalidOperationException("Connection string 'Library' is missing. Add it in Manage User Secrets.");
 }
 var dataSource = NpgsqlDataSource.Create(connectionString);
 builder.Services.AddSingleton(dataSource);
