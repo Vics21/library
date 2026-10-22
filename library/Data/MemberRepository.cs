@@ -18,7 +18,7 @@ public class MemberRepository
         {
             MemberId = reader.GetInt64(0),
             FullName = reader.GetString(1),
-            Email = reader.IsDBNull(2) ? null : reader.GetString(2),
+            Email = reader.IsDBNull(2) ? null : reader.GetString(3),
             MemberType = reader.GetString(3)
         };
     }
@@ -85,7 +85,7 @@ public class MemberRepository
 
         await using var command = _dataSource.CreateCommand(sql);
         command.Parameters.AddWithValue("id", id);
-
+        
         await command.ExecuteNonQueryAsync();
     }
 }
