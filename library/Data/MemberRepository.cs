@@ -2,6 +2,7 @@
 using Npgsql;
 
 namespace library.Data;
+
 public class MemberRepository
 {
     private readonly NpgsqlDataSource _dataSource;
@@ -17,8 +18,8 @@ public class MemberRepository
         {
             MemberId = reader.GetInt64(0),
             FullName = reader.GetString(1),
-            Email = reader.IsDBNull(2) ? null : reader.GetString(2),   
-            MemberType = reader.GetString(3)                                
+            Email = reader.IsDBNull(2) ? null : reader.GetString(2),
+            MemberType = reader.GetString(3)
         };
     }
 
@@ -47,7 +48,7 @@ public class MemberRepository
         await using var command = _dataSource.CreateCommand(sql);
         command.Parameters.AddWithValue("full_name", member.FullName);
         command.Parameters.AddWithValue("email", (object?)member.Email ?? DBNull.Value);
-        command.Parameters.AddWithValue("member_type", member.MemberType);   
+        command.Parameters.AddWithValue("member_type", member.MemberType);
 
         await command.ExecuteNonQueryAsync();
     }
