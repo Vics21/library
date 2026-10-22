@@ -18,7 +18,7 @@ public class MemberRepository
         {
             MemberId = reader.GetInt64(0),
             FullName = reader.GetString(1),
-            Email = reader.IsDBNull(2) ? null : reader.GetString(3),
+            Email = reader.IsDBNull(2) ? null : reader.GetString(2),
             MemberType = reader.GetString(3)
         };
     }
