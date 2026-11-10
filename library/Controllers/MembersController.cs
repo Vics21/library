@@ -77,4 +77,16 @@ public class MembersController : Controller
         await _members.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
+    public async Task<IActionResult> Details(long id)
+    {
+        // 1. Load the member.
+        if (/* 2. there is no such member */)
+        {
+            // 3. Answer "not found".
+        }
+
+        // 4. Put the member and their loans together for the page.
+        // 5. Show the page.
+    }
+
 }
