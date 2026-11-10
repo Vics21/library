@@ -51,5 +51,14 @@ public class LoansController : Controller
         return View(form);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Return(long id)
+    {
+        await _loans.ReturnAsync(id);
+        return RedirectToAction(nameof(Index));
+    }
+
+
 }
 
