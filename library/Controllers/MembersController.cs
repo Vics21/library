@@ -1,4 +1,5 @@
-﻿using library.Data;
+﻿using Npgsql;
+using library.Data;
 using library.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,33 +61,28 @@ public class MembersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Delete(long id)
-    {
-        var member = await _members.GetByIdAsync(id);
-        if (member == null)
-        {
-            return NotFound();
-        }
-        return View(member);
-    }
-
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id)
     {
-        await _members.DeleteAsync(id);
-        return RedirectToAction(nameof(Index));
-    }
-    public async Task<IActionResult> Details(long id)
-    {
-        // 1. Load the member.
-        if (/* 2. there is no such member */)
+        try
         {
-            // 3. Answer "not found".
+            await _members.DeleteAsync(id);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.ForeignKeyViolation)
+        {
+            var member = await _members.GetByIdAsync(id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Error = "This member has loans on record, so the database will not delete them.";
+            return View("Delete", member);
         }
 
-        // 4. Put the member and their loans together for the page.
-        // 5. Show the page.
+        return RedirectToAction(nameof(Index));
     }
 
 }
+
+

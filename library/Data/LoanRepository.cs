@@ -43,7 +43,8 @@ public class LoanRepository
 
         var loans = new List<LoanView>();
         await using var command = _dataSource.CreateCommand(sql);
-        return loans;
+        await using var reader = await command.ExecuteReaderAsync();
+
         while (await reader.ReadAsync())
         {
             loans.Add(ReadLoan(reader));
@@ -91,10 +92,10 @@ public class LoanRepository
     }
     public async Task ReturnAsync(long loanId)
     {
-        await using var command = _dataSource.CreateCommand(sql);
         const string sql = "UPDATE lending.loan SET returned_on = CURRENT_DATE " +
                    "WHERE loan_id = @id AND returned_on IS NULL;";
 
+        await using var command = _dataSource.CreateCommand(sql);
         command.Parameters.AddWithValue("id", loanId);
         await command.ExecuteNonQueryAsync();
     }
